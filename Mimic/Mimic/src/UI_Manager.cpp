@@ -71,7 +71,7 @@ bool UI_Manager::init()
     window_height = 960;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(window_width, window_height, "Not a mimic!", NULL, NULL);
+    window = glfwCreateWindow(window_width, window_height, "Vanillaware", NULL, NULL);
     if (!window)
     {
         glfwTerminate();

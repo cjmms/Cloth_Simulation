@@ -30,7 +30,6 @@ Renderer::Renderer(Scene const* scene)
 
 	cloth = new Cloth(glm::vec3(0), 15, 15, 1);
 
-    //std::cout <<  "Renderer Constructor" << std::endl;
 	glEnable(GL_DEPTH_TEST); 
 	glEnable(GL_MULTISAMPLE);
 }
@@ -66,6 +65,8 @@ void Renderer::Render(Scene const* scene)
     lightShader->setMat4("model", glm::mat4(1.0));
     lightShader->setMat4("view", camera.getViewMatrix());
     lightShader->setMat4("projection", camera.getProjectionMatrix());
+
+	lightShader->setVec3("viewPos", camera.getCameraPos());
 
     //scene->RenderCube(lightShader);
 

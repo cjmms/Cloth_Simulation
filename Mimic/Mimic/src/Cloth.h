@@ -31,10 +31,14 @@ private:
 	//-----------------------------------------//
 	void CreateMassNode(int rowIndex, int ColumnIndex);
 	void CreateSprings(int rowIndex, int ColumnIndex);
-
 	//-----------------------------------------//
 
 	inline MassNode* getNode(int x, int y) { return nodes[y * nodesPerRow + x]; }
+
+	inline glm::vec3 ComputeTriangleNormal(Vertex &n1, Vertex& n2, Vertex& n3) const
+	{ return glm::cross(n2.Position - n1.Position, n3.Position - n1.Position); }
+
+	void UpdateNormal(void);
 
 	void SimulateGravity(void);
 	void SimulateInternalForce(float timeStamp);	// damp + Hooke

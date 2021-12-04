@@ -90,7 +90,7 @@ std::vector<Vertex>& Cloth::GetTriangles()
 void Cloth::SimulateGravity(void)
 {
     for (MassNode* node: nodes)
-        node->force += (glm::vec3(0.0, -9.8 * 0.1, 0.0) * (float)node->mass);    // G = g * m,    g = 9.8 
+        node->force += (glm::vec3(0.0, -9.8, 0.0) * (float)node->mass);    // G = g * m,    g = 9.8 
 }
 
 
@@ -107,4 +107,29 @@ void Cloth::Simulate(float timeStamp)
     SimulateInternalForce(timeStamp);
 
     for (MassNode* node : nodes) node->Simulate(timeStamp); // update physical propertis of every node
+
+    UpdateNormal();
+}
+
+
+void Cloth::UpdateNormal(void)
+{
+    glm::vec3 normal(0.0, 0.0, 0.0);
+
+    // reset normal
+    for (Vertex vertex : vertices) vertex.Normal = glm::vec3(0.0);
+
+    /** Compute normal of each face **/
+    for (int i = 0; i < vertices.size() / 3; i++)   // 3 nodes in each triangle
+    { 
+        normal = ComputeTriangleNormal(vertices[3 * i + 0], vertices[3 * i + 1], vertices[3 * i + 2]);
+
+        // Add all face normal
+        vertices[3 * i + 0].Normal += normal;
+        vertices[3 * i + 1].Normal += normal;
+        vertices[3 * i + 2].Normal += normal;
+    }
+
+    // normalize
+    for (Vertex vertex : vertices) vertex.Normal = glm::normalize(vertex.Normal);
 }
