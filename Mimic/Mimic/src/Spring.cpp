@@ -11,7 +11,7 @@ Spring::Spring(MassNode* node1, MassNode *node2, float hookC, float dampC)
 // Spring-Dampers
 // Equations come from link below
 // https://cseweb.ucsd.edu/classes/sp16/cse169-a/slides/CSE169_11.pdf page 12
-void Spring::Update(float timeStamp)
+void Spring::Simulate(float timeStamp)
 {
 	// Force Simulation
 	// 	----------------------------------------------------------------- //

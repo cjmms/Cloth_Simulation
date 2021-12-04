@@ -5,7 +5,7 @@ MassNode::MassNode(glm::vec3 position)
 	:mass(1.0), position(position), velocity(0.0), acceleration(0), force(0), isFixed(false)
 {}
 
-void MassNode::Update(float timeStamp)
+void MassNode::Simulate(float timeStamp)
 {
     if (isFixed) return;
 

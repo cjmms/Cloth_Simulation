@@ -8,14 +8,19 @@ class MassNode
 public:
 	MassNode(glm::vec3 position);
 
-	void Update(float timeStamp);
+	void Simulate(float timeStamp);
 
 public:
+	// physics
 	float mass;
 	glm::vec3 position;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
 	glm::vec3 force;
+
+	// graphics
+	glm::vec2 texCoord;
+	glm::vec3 normal;
 
 	bool isFixed;
 };
