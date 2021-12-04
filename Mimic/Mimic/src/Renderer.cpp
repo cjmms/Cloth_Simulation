@@ -56,6 +56,8 @@ void Renderer::Render(Scene const* scene)
 {    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	cloth->Simulate(0.013);
+
     lightShader->setTexture("tex", TextureID);
 
     lightShader->setMat4("model", glm::mat4(1.0));

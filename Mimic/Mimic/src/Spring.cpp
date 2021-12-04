@@ -19,12 +19,12 @@ void Spring::Simulate(float timeStamp)
 	float currentLength = glm::length(node1->Position() - node2->Position());
 	
 	// one of the two force directions
-	glm::vec3 forceDir = glm::normalize(node1->Position() - node2->Position());
+	glm::vec3 forceDir = glm::normalize(node2->Position() - node1->Position());
 	
-	glm::vec3 velocityDiff = node1->velocity - node2->velocity;
+	glm::vec3 velocityDiff = node2->velocity - node1->velocity;
 
 	// hooke's law without direction, only force magnitude
-	float HookMagnitude = (currentLength - restLength) * hookC;	
+	float HookMagnitude = (float)(currentLength - restLength) * hookC;	
 
 	// damping force
 	float dampMagnitude = glm::dot(forceDir, velocityDiff) * dampC;
@@ -37,6 +37,6 @@ void Spring::Simulate(float timeStamp)
 	// force can apply to node2 directly
 	// force with opposite direction should be applied to node1
 
-	node2->force = force;
-	node1->force = -force;
+	node2->force += -force;
+	node1->force += force;
 }
