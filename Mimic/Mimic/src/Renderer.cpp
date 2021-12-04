@@ -24,6 +24,7 @@ Renderer::Renderer(Scene const* scene)
     :lightShader(new Shader("res/Shaders/basic.shader")),
     debugMode(debugMode)
 {
+    TextureID = ResourceManager::loadTexture("res/Assets/Disco.jpg");
 
     //std::cout <<  "Renderer Constructor" << std::endl;
 	glEnable(GL_DEPTH_TEST);    
@@ -53,8 +54,9 @@ void Renderer::Render(Scene const* scene)
 {    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    lightShader->setMat4("model", glm::mat4(1.0));
+    lightShader->setTexture("tex", TextureID);
 
+    lightShader->setMat4("model", glm::mat4(1.0));
     lightShader->setMat4("view", camera.getViewMatrix());
     lightShader->setMat4("projection", camera.getProjectionMatrix());
 

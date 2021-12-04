@@ -28,6 +28,7 @@ private:
 	Shader *lightShader;
 	bool debugMode;
 
+	unsigned int TextureID;
 
 	void RenderUI();
 

@@ -150,14 +150,11 @@
   <ItemGroup>
     <None Include="res\Shaders\basic.shader" />
     <None Include="res\Shaders\ColorQuad.shader" />
-    <None Include="res\Shaders\DepthQuad.shader" />
-    <None Include="res\Shaders\ForwardPBR.shader" />
     <None Include="res\Shaders\Shadow\DepthMap.shader" />
     <None Include="res\Shaders\DeferredShading\FillG-Buffer.shader" />
     <None Include="res\Shaders\DeferredShading\DeferredPBR.shader" />
     <None Include="res\Shaders\VolumetricLight\BilateralUp.shader" />
     <None Include="res\Shaders\VolumetricLight\VolumetricLighting.shader" />
-    <None Include="res\Shaders\GaussianBlur.shader" />
     <None Include="res\Shaders\Shadow\VSM.shader" />
     <None Include="res\Shaders\IBL\equirectangular.shader" />
     <None Include="res\Shaders\IBL\Cubemap.shader" />
