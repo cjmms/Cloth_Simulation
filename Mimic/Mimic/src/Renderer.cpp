@@ -25,11 +25,14 @@ Renderer::Renderer(Scene const* scene)
     :lightShader(new Shader("res/Shaders/basic.shader")),
     debugMode(debugMode)
 {
-    TextureID = ResourceManager::loadTexture("res/Assets/Disco.jpg");
-	cloth = new Cloth(glm::vec3(0), 10, 10, 5);
+    //TextureID = ResourceManager::loadTexture("res/Assets/Disco.jpg");
+	TextureID = ResourceManager::loadTexture("res/Assets/13.jpg");
+
+	cloth = new Cloth(glm::vec3(0), 15, 15, 1);
 
     //std::cout <<  "Renderer Constructor" << std::endl;
-	glEnable(GL_DEPTH_TEST);    
+	glEnable(GL_DEPTH_TEST); 
+	glEnable(GL_MULTISAMPLE);
 }
 
 
@@ -56,7 +59,7 @@ void Renderer::Render(Scene const* scene)
 {    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	cloth->Simulate(0.013);
+	cloth->Simulate(0.016);
 
     lightShader->setTexture("tex", TextureID);
 
@@ -67,7 +70,8 @@ void Renderer::Render(Scene const* scene)
     //scene->RenderCube(lightShader);
 
 	lightShader->Bind();
-	RenderVertices(cloth->GetVertices(), vertexSize);
+	//RenderVertices(cloth->GetVertices(), vertexSize);
+	RenderVertices(cloth->GetTriangles(), vertexSize);
 	lightShader->unBind();
 
     RenderUI();
@@ -102,7 +106,8 @@ void Renderer::RenderVertices(std::vector<Vertex>& vertices, int size)
 
 	glPointSize(size);
 	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-	glDrawArrays(GL_POINTS, 0, vertices.size());
+	//glDrawArrays(GL_POINTS, 0, vertices.size());
+	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
 
 	//glDrawArrays(GL_LINES, 0, vertices.size());
 	glBindVertexArray(0);

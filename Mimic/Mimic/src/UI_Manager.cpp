@@ -64,6 +64,8 @@ bool UI_Manager::init()
         return false;
     }
 
+    glfwWindowHint(GLFW_SAMPLES, 4);    // 4 X MSAA
+
     // default screen size
     window_width = 1280;
     window_height = 960;
@@ -91,7 +93,6 @@ bool UI_Manager::init()
     glfwSetMouseButtonCallback(window, mouseButton_callback);
 
     disableCursor();
-
 
 
 

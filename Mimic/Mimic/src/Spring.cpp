@@ -23,6 +23,7 @@ void Spring::Simulate(float timeStamp)
 	
 	glm::vec3 velocityDiff = node2->velocity - node1->velocity;
 
+
 	// hooke's law without direction, only force magnitude
 	float HookMagnitude = (float)(currentLength - restLength) * hookC;	
 

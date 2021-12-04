@@ -27,6 +27,8 @@ void Cloth::CreateMassNode(int rowIndex, int ColumnIndex)
 
     MassNode* node = new MassNode(position);
 
+    //node->mass = node->mass / nodesDensity;     // The mass of cloth should NOT increase when node density increases
+
     node->vertex.TexCoord.x = (float)ColumnIndex / (nodesPerRow - 1);
     node->vertex.TexCoord.y = (float)rowIndex / (1 - nodesPerColumn);
 
@@ -64,12 +66,31 @@ std::vector<Vertex>& Cloth::GetVertices()
     return vertices;
 }
 
+std::vector<Vertex>& Cloth::GetTriangles()
+{
+    vertices.clear();
+
+    for (int i = 0; i < nodesPerRow - 1; i++) {
+        for (int j = 0; j < nodesPerColumn - 1; j++) {
+            // Left upper triangle
+            vertices.push_back(getNode(i + 1, j)->vertex);
+            vertices.push_back(getNode(i, j)->vertex);
+            vertices.push_back(getNode(i, j + 1)->vertex);
+            // Right bottom triangle
+            vertices.push_back(getNode(i + 1, j + 1)->vertex);
+            vertices.push_back(getNode(i + 1, j)->vertex);
+            vertices.push_back(getNode(i, j + 1)->vertex);
+        }
+    }
+    return vertices;
+}
+
 
 
 void Cloth::SimulateGravity(void)
 {
     for (MassNode* node: nodes)
-        node->force += (glm::vec3(0.0, -9.8 * 0.1, 0.0) * node->mass);    // G = g * m,    g = 9.8 
+        node->force += (glm::vec3(0.0, -9.8 * 0.1, 0.0) * (float)node->mass);    // G = g * m,    g = 9.8 
 }
 
 

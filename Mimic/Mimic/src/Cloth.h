@@ -18,12 +18,12 @@ public:
 	std::vector<Vertex> vertices;
 
 	// Hooke's coefficients
-	float structuralCoef = 1000.0;
+	float structuralCoef = 2000.0;
 	float shearCoef = 50.0;
 	float bendingCoef = 400.0;
 
 	// damping coefficient
-	float dampCoef = 5.0;
+	float dampCoef = 2.0;
 
 private:
 
@@ -44,4 +44,5 @@ public:
 	void Simulate(float timeStamp);
 
 	std::vector<Vertex>& GetVertices();
+	std::vector<Vertex>& GetTriangles();
 };
