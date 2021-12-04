@@ -5,7 +5,7 @@ Camera::Camera()
 	: sensitivity(0.1f), deltaTime(0.0f), lastFrame(0.0f), firstMouse(true), fov(45.0f),
 	disabled(false)
 {
-	cameraPos = glm::vec3(0.0f, 1.0f, 4.0f);
+	cameraPos = glm::vec3(5.0f, -5.0f, 30.0f);
 	cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 	cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 

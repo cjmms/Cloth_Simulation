@@ -90,6 +90,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Cloth.cpp" />
     <ClCompile Include="src\imgui\imgui.cpp" />
     <ClCompile Include="src\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
@@ -112,9 +113,11 @@
     <ClCompile Include="src\Core\IndexBuffer.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Core\VertexBuffer.cpp" />
+    <ClCompile Include="src\Spring.cpp" />
     <ClCompile Include="src\UI_Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Cloth.h" />
     <ClInclude Include="src\imgui\imconfig.h" />
     <ClInclude Include="src\imgui\imgui.h" />
     <ClInclude Include="src\imgui\imgui_impl_glfw.h" />
@@ -136,6 +139,7 @@
     <ClInclude Include="src\Core\Shader.h" />
     <ClInclude Include="src\Core\IndexBuffer.h" />
     <ClInclude Include="src\Core\VertexBuffer.h" />
+    <ClInclude Include="src\Spring.h" />
     <ClInclude Include="src\UI_Manager.h" />
   </ItemGroup>
   <ItemGroup>

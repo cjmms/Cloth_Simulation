@@ -14,6 +14,7 @@ public:
 
 	std::vector<MassNode*> nodes;
 	std::vector<Spring*> springs;
+	std::vector<Vertex> vertices;
 
 
 public:
@@ -27,4 +28,6 @@ public:
 	void InitSprings(void);
 
 	//-----------------------------------------//
+
+	std::vector<Vertex>& GetVertices();
 };

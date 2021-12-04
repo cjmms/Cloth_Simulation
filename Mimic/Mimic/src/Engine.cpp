@@ -50,7 +50,7 @@ void Engine::run()
 {
     Renderer renderer(scene);
 
-    //UI_Mgr.enableCursor();
+    UI_Mgr.enableCursor();
 
 
     while (!UI_Mgr.windowClosed())
@@ -58,7 +58,7 @@ void Engine::run()
         UI_Mgr.update();
 
         //camera.Print();
-        //camera.disable();
+        camera.disable();
 
         camera.cameraUpdateFrameTime();
 

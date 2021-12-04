@@ -4,7 +4,7 @@
 Spring::Spring(MassNode* node1, MassNode *node2, float hookC, float dampC)
 	:node1(node1), node2(node2), hookC(hookC), dampC(dampC)
 {
-	restLength = glm::length(node1->position - node2->position);
+	restLength = glm::length(node1->Position() - node2->Position());
 }
 
 
@@ -16,10 +16,10 @@ void Spring::Simulate(float timeStamp)
 	// Force Simulation
 	// 	----------------------------------------------------------------- //
 	// current distance between 2 nodes
-	float currentLength = glm::length(node1->position - node2->position);
+	float currentLength = glm::length(node1->Position() - node2->Position());
 	
 	// one of the two force directions
-	glm::vec3 forceDir = glm::normalize(node1->position - node2->position);
+	glm::vec3 forceDir = glm::normalize(node1->Position() - node2->Position());
 	
 	glm::vec3 velocityDiff = node1->velocity - node2->velocity;
 
