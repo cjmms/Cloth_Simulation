@@ -1,0 +1,24 @@
+How to compile and run it:
+Double click .sln file, build it in Release mode, run it.
+
+Path to Release version .exe file:
+./Mimic/Mimic.exe
+
+Project description:
+1. I implemented Cloth Simulation.
+2. It has 2304 nodes, 13346 springs.
+3. There are 3 kinds of springs in this project: 
+	Structural (vertical / horizontal neighbor)
+	Shearing (diagonal neighbor)
+	Bending (vertical / horizontal next neighbor)
+4. Integrator: Verlet Integration
+5. Physically based
+6. Each spring calculate damp force and Hooke's force
+7. Two external environment forces: Gravity and Wind
+
+How to use project:
+1. W / S, move forward and back
+2. A / D, move left and right
+3. In game UI window 3 sliders that can change wind direction
+4. Show Springs checkbox show springs and nodes.
+5. Node size can be changed by a slider in UI

@@ -24,7 +24,7 @@ Renderer::Renderer(Scene const* scene)
     debugMode(debugMode)
 {
     //TextureID = ResourceManager::loadTexture("res/Assets/Disco.jpg");
-	TextureID = Scene::loadTexture("res/Assets/13.jpg");
+	TextureID = Scene::loadTexture("res/Assets/13AD.png");
 
 	cloth = new Cloth(glm::vec3(0), 16, 16, 3);
 
