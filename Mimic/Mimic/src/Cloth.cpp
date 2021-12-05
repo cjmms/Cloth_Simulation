@@ -74,6 +74,20 @@ std::vector<Vertex>& Cloth::GetTriangles()
 }
 
 
+std::vector<Vertex>& Cloth::GetLines()
+{
+    vertices.clear();
+
+    for (Spring* spring: springs) {
+        vertices.push_back(spring->node1->vertex);
+        vertices.push_back(spring->node2->vertex);
+    }
+
+    return vertices;
+}
+
+
+
 
 void Cloth::UpdateNormal(void)
 {

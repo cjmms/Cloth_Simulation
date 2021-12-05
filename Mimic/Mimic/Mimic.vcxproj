@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\cloth.shader" />
+    <None Include="res\Shaders\debug.shader" />
     <None Include="res\Shaders\IBL\BRDF_Integration.shader" />
     <None Include="res\Shaders\IBL\Convolution.shader" />
     <None Include="res\Shaders\IBL\Cubemap.shader" />

@@ -14,7 +14,7 @@ class Renderer
 {
 private:
 	Shader *clothShader;
-	Shader* sphereShader;
+	Shader* debugShader;
 
 	bool debugMode;
 	Cloth* cloth;
@@ -30,13 +30,19 @@ private:
 	double normalUpdateTime;
 	double gravitySimTime;
 
+	bool enableDebug = false;
+
 	float windx;
 	float windy;
 	float windz;
 
 	void RenderUI();
 
-	void RenderVertices(std::vector<Vertex>& vertices, int size);
+	void RenderVertices(std::vector<Vertex>& vertices, int size, unsigned int type);
+
+	void RenderCloth();
+
+	void DebugDraw();
 
 public:
 	Renderer(Scene const* scene);

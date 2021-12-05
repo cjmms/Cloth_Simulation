@@ -20,7 +20,7 @@ extern UI_Manager UI_Mgr;
 
 Renderer::Renderer(Scene const* scene)
     :clothShader(new Shader("res/Shaders/cloth.shader")),
-	sphereShader(new Shader("res/Shaders/sphere.shader")),
+	debugShader(new Shader("res/Shaders/debug.shader")),
     debugMode(debugMode)
 {
     //TextureID = ResourceManager::loadTexture("res/Assets/Disco.jpg");
@@ -56,6 +56,8 @@ void Renderer::RenderUI()
 	ImGui::SliderFloat("x", &windx, -1.0, 1.0);
 	ImGui::SliderFloat("y", &windy, -1.0, 1.0);
 	ImGui::SliderFloat("z", &windz, -1.0, 1.0);
+
+	ImGui::Checkbox("Show Springs", &enableDebug);
     
     ImGui::End();
 }
@@ -68,6 +70,7 @@ void Renderer::Render(Scene const* scene)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glClearColor(0.3, 0.3, 0.3, 1.0);
 
+	// Simulation start
 	double prev = glfwGetTime();
 	double now;
 
@@ -96,23 +99,17 @@ void Renderer::Render(Scene const* scene)
 	normalUpdateTime = now - prev;
 	prev = now;
 
-	clothShader->setTexture("tex", TextureID);
+	// Simulation ends
 
-	clothShader->setMat4("model", glm::mat4(1.0));
-	clothShader->setMat4("view", camera.getViewMatrix());
-	clothShader->setMat4("projection", camera.getProjectionMatrix());
-
-	clothShader->setVec3("viewPos", camera.getCameraPos());
-
-	clothShader->Bind();
-	RenderVertices(cloth->GetTriangles(), vertexSize);
-	clothShader->unBind();
+	// Render
+	if(!enableDebug) RenderCloth();
+	else DebugDraw();
 
     RenderUI();
 }
 
 
-void Renderer::RenderVertices(std::vector<Vertex>& vertices, int size)
+void Renderer::RenderVertices(std::vector<Vertex>& vertices, int size, unsigned int type)
 {
 	unsigned int VBO, VAO;
 	glGenVertexArrays(1, &VAO);
@@ -138,12 +135,38 @@ void Renderer::RenderVertices(std::vector<Vertex>& vertices, int size)
 
 	glPointSize(size);
 	glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-	//glDrawArrays(GL_POINTS, 0, vertices.size());
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
-
-	//glDrawArrays(GL_LINES, 0, vertices.size());
+	glDrawArrays(type, 0, vertices.size());
 	glBindVertexArray(0);
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+}
+
+
+
+void Renderer::RenderCloth()
+{
+	clothShader->setTexture("tex", TextureID);
+
+	clothShader->setMat4("model", glm::mat4(1.0));
+	clothShader->setMat4("view", camera.getViewMatrix());
+	clothShader->setMat4("projection", camera.getProjectionMatrix());
+
+	clothShader->setVec3("viewPos", camera.getCameraPos());
+
+	clothShader->Bind();
+	RenderVertices(cloth->GetTriangles(), vertexSize, GL_TRIANGLES);
+	clothShader->unBind();
+}
+
+void Renderer::DebugDraw()
+{
+	debugShader->setMat4("model", glm::mat4(1.0));
+	debugShader->setMat4("view", camera.getViewMatrix());
+	debugShader->setMat4("projection", camera.getProjectionMatrix());
+
+	debugShader->Bind();
+	RenderVertices(cloth->GetLines(), vertexSize, GL_POINTS);
+	RenderVertices(cloth->GetLines(), vertexSize, GL_LINES);
+	debugShader->unBind();
 }

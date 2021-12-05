@@ -43,7 +43,7 @@ void main()
 {
 	// hard coded light config
 	vec3 lightPos = vec3(3, -6, 17);
-	vec3 lightColor = vec3(6);
+	vec3 lightColor = vec3(8);
 	vec3 ambient = vec3(0.1);
 	float specularStrength = 0.2;
 

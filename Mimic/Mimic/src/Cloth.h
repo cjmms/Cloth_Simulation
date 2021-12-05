@@ -48,6 +48,7 @@ public:
 	Cloth(glm::vec3 position, int width, int height, int nodesDensity);
 
 	std::vector<Vertex>& GetTriangles();
+	std::vector<Vertex>& GetLines();
 
 	// simulation functions
 	inline void SimulateNodes(float timeStamp) { for (MassNode* node : nodes) node->Simulate(timeStamp); }

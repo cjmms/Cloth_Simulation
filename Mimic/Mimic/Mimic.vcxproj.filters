@@ -143,5 +143,6 @@
     <None Include="res\Shaders\IBL\Prefilter.shader" />
     <None Include="res\Shaders\IBL\BRDF_Integration.shader" />
     <None Include="res\Shaders\SSAO\SSAO.shader" />
+    <None Include="res\Shaders\debug.shader" />
   </ItemGroup>
 </Project>
