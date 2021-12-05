@@ -1,5 +1,7 @@
 #include "Camera.h"
 #include <iostream>
+#include "../Renderer.h"
+
 
 Camera::Camera()
 	: sensitivity(0.1f), deltaTime(0.0f), lastFrame(0.0f), firstMouse(true), fov(45.0f),
@@ -98,10 +100,6 @@ void Camera::setCameraKey(GLFWwindow* window)
 		cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		cameraPos += cameraSpeed * cameraUp;
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		cameraPos -= cameraSpeed * cameraUp;
 
 }
 

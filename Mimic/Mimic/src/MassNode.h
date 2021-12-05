@@ -3,7 +3,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Core/Mesh.h"
+struct Vertex
+{
+	glm::vec3 Position;
+	glm::vec3 Normal;
+	glm::vec2 TexCoord;
+};
 
 class MassNode
 {
@@ -20,6 +25,7 @@ public:
 	glm::vec3 acceleration;
 	glm::vec3 force;
 
+	// graphics
 	Vertex vertex;
 
 	bool isFixed;

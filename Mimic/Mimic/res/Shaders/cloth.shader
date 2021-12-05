@@ -16,7 +16,7 @@ void main()
 {
     gl_Position = projection * view * model * vec4(aPos, 1.0);
 	TexCoord = aTexCoords;
-	Normal = aNormal;
+	Normal = transpose(inverse(mat3(model))) * aNormal;
 	FragPos = vec3(model * vec4(aPos, 1.0));
 }
 
@@ -42,10 +42,10 @@ out vec4 FragColor;
 void main()
 {
 	// hard coded light config
-	vec3 lightPos = vec3(3, -13, -4);
-	vec3 lightColor = vec3(2, 2, 2);
-	vec3 ambient = vec3(0.1, 0.1, 0.1);
-	float specularStrength = 0.5;
+	vec3 lightPos = vec3(3, -10, 10);
+	vec3 lightColor = vec3(5);
+	vec3 ambient = vec3(0.1);
+	float specularStrength = 0.2;
 
 	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(lightPos - FragPos);
@@ -65,11 +65,11 @@ void main()
 	float distance = length(lightPos - FragPos);
 	float attenuation = 1.0 / (1.0 + 0.09f * distance + 0.032f * (distance * distance));
 
-
 	vec3 objColor = texture(tex, TexCoord).rgb;
 
 	vec3 result = attenuation * (ambient + diffuse + specular) * objColor;
 
 	//FragColor = vec4(0.8, 0.8, 0.8, 1.0f);
 	FragColor = vec4(result, 1.0);
+	//FragColor = vec4(Normal, 1.0f);
 }

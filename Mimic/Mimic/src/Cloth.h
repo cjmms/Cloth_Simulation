@@ -18,12 +18,14 @@ public:
 	std::vector<Vertex> vertices;
 
 	// Hooke's coefficients
-	float structuralCoef = 2000.0;
+	float structuralCoef = 1000.0;
 	float shearCoef = 50.0;
-	float bendingCoef = 400.0;
+	float bendingCoef = 300.0;
 
 	// damping coefficient
 	float dampCoef = 2.0;
+
+	glm::vec3 gravity = glm::vec3(0, -0.98, 0);
 
 private:
 
@@ -38,15 +40,23 @@ private:
 	inline glm::vec3 ComputeTriangleNormal(Vertex &n1, Vertex& n2, Vertex& n3) const
 	{ return glm::cross(n2.Position - n1.Position, n3.Position - n1.Position); }
 
-	void UpdateNormal(void);
+	
 
-	void SimulateGravity(void);
-	void SimulateInternalForce(float timeStamp);	// damp + Hooke
+	
 
 public:
 	Cloth(glm::vec3 position, int width, int height, int nodesDensity);
-	void Simulate(float timeStamp);
 
-	std::vector<Vertex>& GetVertices();
 	std::vector<Vertex>& GetTriangles();
+
+	// simulation functions
+	inline void SimulateNodes(float timeStamp) { for (MassNode* node : nodes) node->Simulate(timeStamp); }
+	
+	inline void SimulateInternalForce(float timeStamp) { for (Spring* spring : springs)  spring->Simulate(timeStamp); }
+
+	inline void SimulateWind(glm::vec3 windDir) { for (MassNode* node : nodes) node->force += (windDir * (float)node->mass); }
+
+	void SimulateGravity(void) { for (MassNode* node : nodes) node->force += (gravity * node->mass); }
+
+	void UpdateNormal(void);
 };

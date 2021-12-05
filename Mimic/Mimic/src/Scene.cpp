@@ -1,8 +1,11 @@
 #include "Scene.h"
-#include "Core/Model.h"
-#include "ResourceManager.h"
+#include "Core/Shader.h"
 #include <sstream>
 
+// These 2 lines should only be defined in this file
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
+#include <iostream>
 
 Scene::Scene()
 {
@@ -13,67 +16,8 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    lightSources.clear();
-    objects.clear();
 }
 
-void Scene::addObjects(const char* address, glm::vec3 scale)
-{
-    Model* model = new Model(address);
-    objects.push_back(new Object(model, scale));
-}
-
-
-
-
-
-
-
-
-
-
-Object::Object(Model* model, glm::vec3 scale)
-    : model(model), scale(scale)
-{}
-
-
-Object::~Object()
-{
-    delete model;
-}
-
-
-
-glm::mat4 Object::getModelMatrix() const
-{
-    return glm::scale(glm::mat4(1.0), scale);
-}
-
-
-
-void Scene::InitTextures(std::string str)
-{
-    std::string s = str + "albedo.jpg";
-    albedo = ResourceManager::loadTexture(s.c_str());
-
-    s = str + "normal.jpg";
-    normal = ResourceManager::loadTexture(s.c_str());
-
-    s = str + "roughness.jpg";
-    roughness = ResourceManager::loadTexture(s.c_str());
-
-    s = str + "metallic.jpg";
-    metallic = ResourceManager::loadTexture(s.c_str());
-}
-
-
-void Scene::BindTextures(Shader* shader) const
-{
-    shader->setTexture("material.texture_albedo", albedo);
-    shader->setTexture("material.texture_normal", normal);
-    shader->setTexture("material.texture_metallic", metallic);
-    shader->setTexture("material.texture_roughness", roughness);
-}
 
 
 
@@ -214,4 +158,54 @@ void Scene::RenderCube(Shader* shader) const
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
     shader->unBind();
+}
+
+
+
+unsigned int Scene::loadTexture(char const* path, bool gamma)
+{
+    stbi_set_flip_vertically_on_load(true);
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum internalFormat;
+        GLenum dataFormat;
+        if (nrComponents == 1)
+        {
+            internalFormat = dataFormat = GL_RED;
+        }
+        else if (nrComponents == 3)
+        {
+            internalFormat = gamma ? GL_SRGB : GL_RGB;
+            dataFormat = GL_RGB;
+        }
+        else if (nrComponents == 4)
+        {
+            internalFormat = gamma ? GL_SRGB_ALPHA : GL_RGBA;
+            dataFormat = GL_RGBA;
+        }
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+        std::cout << path << " loaded successfully." << std::endl;
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
+    return textureID;
 }

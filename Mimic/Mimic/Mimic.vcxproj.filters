@@ -21,18 +21,6 @@
     <ClCompile Include="src\Core\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Core\IndexBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Light.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Core\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,13 +33,7 @@
     <ClCompile Include="src\UI_Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\FBO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Renderer.cpp">
@@ -98,18 +80,6 @@
     <ClInclude Include="src\Core\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\IndexBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Light.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Core\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -119,13 +89,7 @@
     <ClInclude Include="src\UI_Manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\FBO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer.h">
@@ -166,8 +130,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\Shaders\basic.shader" />
-    <None Include="res\Shaders\ColorQuad.shader" />
+    <None Include="res\Shaders\cloth.shader" />
     <None Include="res\Shaders\Shadow\DepthMap.shader" />
     <None Include="res\Shaders\DeferredShading\FillG-Buffer.shader" />
     <None Include="res\Shaders\DeferredShading\DeferredPBR.shader" />

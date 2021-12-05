@@ -9,13 +9,16 @@ Cloth::Cloth(glm::vec3 position, int width, int height, int nodesDensity)
 
     for (int i = 0; i < nodesPerRow; i++) 
         for (int j = 0; j < nodesPerColumn; j++)  CreateMassNode(i, j);  // new mass node
-  
+
     for (int i = 0; i < nodesPerRow; i++)
         for (int j = 0; j < nodesPerColumn; j++)  CreateSprings(i, j);     // new springs
        
+    std::cout << "Init Cloth with " << nodes.size() << " mass nodes." << std::endl;
+    std::cout << "Init Cloth with " << springs.size() << " springs." << std::endl;
 
-    getNode(0, 0)->isFixed = true;
-    getNode(nodesPerRow - 1, 0)->isFixed = true;
+
+    // pin first line of nodes
+    for (int i = 0; i < nodesPerRow; ++i) getNode(i, 0)->isFixed = true;
 }
 
 void Cloth::CreateMassNode(int rowIndex, int ColumnIndex)
@@ -27,12 +30,9 @@ void Cloth::CreateMassNode(int rowIndex, int ColumnIndex)
 
     MassNode* node = new MassNode(position);
 
-    //node->mass = node->mass / nodesDensity;     // The mass of cloth should NOT increase when node density increases
-
     node->vertex.TexCoord.x = (float)ColumnIndex / (nodesPerRow - 1);
     node->vertex.TexCoord.y = (float)rowIndex / (1 - nodesPerColumn);
 
-   // printf("\t[%d, %d] (%f, %f, %f) - (%f, %f)\n", rowIndex, ColumnIndex, position.x, position.y, position.z, node->vertex.TexCoord.x, node->vertex.TexCoord.y);
     nodes.push_back(node);
 }
 
@@ -53,18 +53,6 @@ void Cloth::CreateSprings(int rowIndex, int ColumnIndex)
     if (ColumnIndex < nodesPerColumn - 2) springs.push_back(new Spring(getNode(rowIndex, ColumnIndex), getNode(rowIndex, ColumnIndex + 2), bendingCoef, dampCoef));
 }
 
-
-
-std::vector<Vertex>& Cloth::GetVertices()
-{
-    vertices.clear();
-
-    // iterate every node
-    for (MassNode* node : nodes)
-        vertices.push_back(node->vertex);
-
-    return vertices;
-}
 
 std::vector<Vertex>& Cloth::GetTriangles()
 {
@@ -87,49 +75,36 @@ std::vector<Vertex>& Cloth::GetTriangles()
 
 
 
-void Cloth::SimulateGravity(void)
-{
-    for (MassNode* node: nodes)
-        node->force += (glm::vec3(0.0, -9.8, 0.0) * (float)node->mass);    // G = g * m,    g = 9.8 
-}
-
-
-
-void Cloth::SimulateInternalForce(float timeStamp)
-{
-    for (Spring* spring: springs)  spring->Simulate(timeStamp);
-}
-
-
-void Cloth::Simulate(float timeStamp)
-{
-    SimulateGravity();
-    SimulateInternalForce(timeStamp);
-
-    for (MassNode* node : nodes) node->Simulate(timeStamp); // update physical propertis of every node
-
-    UpdateNormal();
-}
-
-
 void Cloth::UpdateNormal(void)
 {
     glm::vec3 normal(0.0, 0.0, 0.0);
 
     // reset normal
-    for (Vertex vertex : vertices) vertex.Normal = glm::vec3(0.0);
+    for (MassNode* node : nodes) node->vertex.Normal = glm::vec3(0.0);
 
-    /** Compute normal of each face **/
-    for (int i = 0; i < vertices.size() / 3; i++)   // 3 nodes in each triangle
-    { 
-        normal = ComputeTriangleNormal(vertices[3 * i + 0], vertices[3 * i + 1], vertices[3 * i + 2]);
+    for (int i = 0; i < nodesPerRow - 1; i++) {
+        for (int j = 0; j < nodesPerColumn - 1; j++) {
+            // Left upper triangle
+            MassNode* node1 = getNode(i + 1, j);
+            MassNode* node2 = getNode(i, j);
+            MassNode* node3 = getNode(i, j + 1);
 
-        // Add all face normal
-        vertices[3 * i + 0].Normal += normal;
-        vertices[3 * i + 1].Normal += normal;
-        vertices[3 * i + 2].Normal += normal;
+            normal = ComputeTriangleNormal(node1->vertex, node2->vertex, node3->vertex);
+
+            node1->vertex.Normal += normal;
+            node2->vertex.Normal += normal;
+            node3->vertex.Normal += normal;
+
+            // Right bottom triangle
+            node1 = getNode(i + 1, j + 1);
+            node2 = getNode(i + 1, j);
+            node3 = getNode(i, j + 1);
+
+            normal = ComputeTriangleNormal(node1->vertex, node2->vertex, node3->vertex);
+
+            node1->vertex.Normal += normal;
+            node2->vertex.Normal += normal;
+            node3->vertex.Normal += normal;
+        }
     }
-
-    // normalize
-    for (Vertex vertex : vertices) vertex.Normal = glm::normalize(vertex.Normal);
 }

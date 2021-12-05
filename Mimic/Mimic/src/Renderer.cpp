@@ -2,12 +2,11 @@
 #include "Core/Camera.h"
 #include "UI_Manager.h"
 #include <iostream>
-#include "ResourceManager.h"
-#include "Core/FBO.h"
 #include "Scene.h"
 #include "Core/Shader.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "Cloth.h"
+
 
 #include "imgui/imgui.h"
 
@@ -19,16 +18,15 @@
 extern Camera camera;
 extern UI_Manager UI_Mgr;
 
-
-
 Renderer::Renderer(Scene const* scene)
-    :lightShader(new Shader("res/Shaders/basic.shader")),
+    :clothShader(new Shader("res/Shaders/cloth.shader")),
+	sphereShader(new Shader("res/Shaders/sphere.shader")),
     debugMode(debugMode)
 {
     //TextureID = ResourceManager::loadTexture("res/Assets/Disco.jpg");
-	TextureID = ResourceManager::loadTexture("res/Assets/13.jpg");
+	TextureID = Scene::loadTexture("res/Assets/13.jpg");
 
-	cloth = new Cloth(glm::vec3(0), 15, 15, 1);
+	cloth = new Cloth(glm::vec3(0), 16, 16, 4);
 
 	glEnable(GL_DEPTH_TEST); 
 	glEnable(GL_MULTISAMPLE);
@@ -45,8 +43,14 @@ void Renderer::RenderUI()
 {
     ImGui::Begin("UI");                          
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	ImGui::SliderInt("Vertex Size", &vertexSize, 1, 10);
 
+	ImGui::Text("wind simulation time: %fms", windSimTime * 1000);
+	ImGui::Text("spring simulation time: %fms", springSimTime * 1000);
+	ImGui::Text("node simulation time: %fms", nodesSimTime * 1000);
+	ImGui::Text("normal update time: %fms", normalUpdateTime * 1000);
+	ImGui::Text("gravity simulation time: %fms", gravitySimTime * 1000);
+
+	ImGui::SliderInt("Vertex Size", &vertexSize, 1, 10);
     
     ImGui::End();
 }
@@ -58,26 +62,47 @@ void Renderer::Render(Scene const* scene)
 {    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	cloth->Simulate(0.016);
+	double prev = glfwGetTime();
+	double now;
 
-    lightShader->setTexture("tex", TextureID);
+	cloth->SimulateWind(glm::vec3(0.5, 0, 0.1));
+	now = glfwGetTime();
+	windSimTime = now - prev;
+	prev = now;
 
-    lightShader->setMat4("model", glm::mat4(1.0));
-    lightShader->setMat4("view", camera.getViewMatrix());
-    lightShader->setMat4("projection", camera.getProjectionMatrix());
+	cloth->SimulateGravity();
+	now = glfwGetTime();
+	gravitySimTime = now - prev;
+	prev = now;
 
-	lightShader->setVec3("viewPos", camera.getCameraPos());
+	cloth->SimulateInternalForce(0.016);
+	now = glfwGetTime();
+	springSimTime = now - prev;
+	prev = now;
 
-    //scene->RenderCube(lightShader);
+	cloth->SimulateNodes(0.016);
+	now = glfwGetTime();
+	nodesSimTime = now - prev;
+	prev = now;
 
-	lightShader->Bind();
-	//RenderVertices(cloth->GetVertices(), vertexSize);
+	cloth->UpdateNormal();	// update normals of all vertices
+	now = glfwGetTime();
+	normalUpdateTime = now - prev;
+	prev = now;
+
+	clothShader->setTexture("tex", TextureID);
+
+	clothShader->setMat4("model", glm::mat4(1.0));
+	clothShader->setMat4("view", camera.getViewMatrix());
+	clothShader->setMat4("projection", camera.getProjectionMatrix());
+
+	clothShader->setVec3("viewPos", camera.getCameraPos());
+
+	clothShader->Bind();
 	RenderVertices(cloth->GetTriangles(), vertexSize);
-	lightShader->unBind();
+	clothShader->unBind();
 
     RenderUI();
-
-
 }
 
 
