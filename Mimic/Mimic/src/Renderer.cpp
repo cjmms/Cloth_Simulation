@@ -26,7 +26,7 @@ Renderer::Renderer(Scene const* scene)
     //TextureID = ResourceManager::loadTexture("res/Assets/Disco.jpg");
 	TextureID = Scene::loadTexture("res/Assets/13.jpg");
 
-	cloth = new Cloth(glm::vec3(0), 16, 16, 4);
+	cloth = new Cloth(glm::vec3(0), 16, 16, 3);
 
 	glEnable(GL_DEPTH_TEST); 
 	glEnable(GL_MULTISAMPLE);
@@ -51,6 +51,11 @@ void Renderer::RenderUI()
 	ImGui::Text("gravity simulation time: %fms", gravitySimTime * 1000);
 
 	ImGui::SliderInt("Vertex Size", &vertexSize, 1, 10);
+
+	ImGui::Text("Wind");
+	ImGui::SliderFloat("x", &windx, -1.0, 1.0);
+	ImGui::SliderFloat("y", &windy, -1.0, 1.0);
+	ImGui::SliderFloat("z", &windz, -1.0, 1.0);
     
     ImGui::End();
 }
@@ -61,11 +66,12 @@ void Renderer::RenderUI()
 void Renderer::Render(Scene const* scene)  
 {    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(0.3, 0.3, 0.3, 1.0);
 
 	double prev = glfwGetTime();
 	double now;
 
-	cloth->SimulateWind(glm::vec3(0.5, 0, 0.1));
+	cloth->SimulateWind(glm::vec3(windx, windy, windz));
 	now = glfwGetTime();
 	windSimTime = now - prev;
 	prev = now;

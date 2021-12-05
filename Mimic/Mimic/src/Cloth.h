@@ -18,12 +18,12 @@ public:
 	std::vector<Vertex> vertices;
 
 	// Hooke's coefficients
-	float structuralCoef = 1000.0;
+	float structuralCoef = 2000.0;
 	float shearCoef = 50.0;
-	float bendingCoef = 300.0;
+	float bendingCoef = 400.0;
 
 	// damping coefficient
-	float dampCoef = 2.0;
+	float dampCoef = 1.0;
 
 	glm::vec3 gravity = glm::vec3(0, -0.98, 0);
 

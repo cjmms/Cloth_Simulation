@@ -25,6 +25,8 @@ public:
 	glm::vec3 acceleration;
 	glm::vec3 force;
 
+	glm::vec3 oldPos;
+
 	// graphics
 	Vertex vertex;
 

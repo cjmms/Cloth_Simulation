@@ -30,6 +30,10 @@ private:
 	double normalUpdateTime;
 	double gravitySimTime;
 
+	float windx;
+	float windy;
+	float windz;
+
 	void RenderUI();
 
 	void RenderVertices(std::vector<Vertex>& vertices, int size);

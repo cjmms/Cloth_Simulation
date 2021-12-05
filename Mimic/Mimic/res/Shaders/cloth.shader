@@ -42,8 +42,8 @@ out vec4 FragColor;
 void main()
 {
 	// hard coded light config
-	vec3 lightPos = vec3(3, -10, 10);
-	vec3 lightColor = vec3(5);
+	vec3 lightPos = vec3(3, -6, 17);
+	vec3 lightColor = vec3(6);
 	vec3 ambient = vec3(0.1);
 	float specularStrength = 0.2;
 
@@ -58,7 +58,7 @@ void main()
 	vec3 viewDir = normalize(viewPos - FragPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
 
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8);
 	vec3 specular = specularStrength * spec * lightColor;
 
 	// attenuation
@@ -69,7 +69,5 @@ void main()
 
 	vec3 result = attenuation * (ambient + diffuse + specular) * objColor;
 
-	//FragColor = vec4(0.8, 0.8, 0.8, 1.0f);
 	FragColor = vec4(result, 1.0);
-	//FragColor = vec4(Normal, 1.0f);
 }
